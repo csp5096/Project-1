@@ -1,0 +1,12 @@
+db.sqlite3
+geckodriver.log
+__pycache__
+*.pyc
+*.coverage
+functional_tests/screedumps
+npm-debug.log
+*.env
+htmlcov/
+.pytest_cache/
+
+
