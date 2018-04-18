@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f8f184d0afebfc7758f5836994e3d392b07112b128d2ff10c38da5e40a1601a3"
+            "sha256": "f081d8fa21f7951ccf6e72adad043d888f9713535499d38b4004b1d92aa9c3d6"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -177,6 +177,13 @@
             "index": "pypi",
             "version": "==1.12.0"
         },
+        "pytest-splinter": {
+            "hashes": [
+                "sha256:3435a97e161532c947624583369177cff6cd2c39e017ee3493ca9b95cb0375ee"
+            ],
+            "index": "pypi",
+            "version": "==1.8.5"
+        },
         "pytest-variables": {
             "hashes": [
                 "sha256:59c00b95779657532ac5f8209b28b5d447c8b4bc4210c1d6bdf9a42aa201f9b0",
@@ -219,6 +226,13 @@
                 "sha256:832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb"
             ],
             "version": "==1.11.0"
+        },
+        "splinter": {
+            "hashes": [
+                "sha256:71a83ef32cd976f3fb80a190d3c439a6dd82c347bcd0feb068d7d48e14aee269",
+                "sha256:f97119f84d339067169451d56043f37f6b0a504a17a7ac6e48c91c012be72af6"
+            ],
+            "version": "==0.7.7"
         },
         "urllib3": {
             "hashes": [
