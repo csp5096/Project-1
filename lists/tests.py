@@ -2,4 +2,5 @@ import pytest
 
 @pytest.mark.smoke
 def test_bad_maths():
-    assert (1 + 1) == 3
+    with pytest.raises(AssertionError):
+        assert (1 + 1) == 3
