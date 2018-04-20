@@ -1,6 +1,13 @@
+from django.urls import resolve
+from lists.views import home_page
+
 import pytest
 
-@pytest.mark.smoke
-def test_bad_maths():
-    with pytest.raises(AssertionError):
-        assert (1 + 1) == 3
+@pytest.mark.django_db
+def test_root_url_resolves_to_home_page_view():
+    found = resolve('/')
+    assert found.func == home_page
+
+
+
+
