@@ -1,6 +1,7 @@
 import pytest
 from splinter import Browser
 
+
 @pytest.yield_fixture(scope='session')
 def browser():
     b = Browser()
@@ -12,9 +13,8 @@ BASE_URL = 'http://localhost:8000'
 def url(route):
     return '{}/{}'.format(BASE_URL, route)
 
-# Edith has heard about a cool new online to-do app.
-
-def test_can_check_homepage(browser):
+def test_can_start_a_list_and_retrieve_it_later(browser):
+    # Edith has heard about a cool new online to-do app.
     # She goes to check out its homepage
     browser.visit(url('/'))
 
