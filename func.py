@@ -1,47 +1,37 @@
+from selenium import webdriver
+
 import pytest
-from splinter import Browser
 
+@pytest.mark.usefixtures("driver_get")
+class TestNewVistor:
 
-@pytest.yield_fixture(scope='session')
-def browser():
-    b = Browser()
-    yield b
-    b.quit()
+    def test_can_start_a_list_and_retrieve_it_later(self):
+        # Edith has heard about a cool new online to-do app.
+        # She goes to check out its homepage
+        self.driver.get("http://localhost:8000")
 
-BASE_URL = 'http://localhost:8000'
+        # She notices the page title and header mention to-do lists
+        assert 'To-Do' in self.driver.title
 
-def url(route):
-    return '{}/{}'.format(BASE_URL, route)
+        # She is invited to enter a to-do item straight away
 
-def test_can_start_a_list_and_retrieve_it_later(browser):
-    # Edith has heard about a cool new online to-do app.
-    # She goes to check out its homepage
-    browser.visit(url('/'))
+        # She types "Buy peacock feathers" into a text box
+        # (Edith's hobby is trying fly-fishing lures)
 
-    # She notices the page title and header mention to-do lists
-    assert 'To-Do' in browser.title
+        # When she hits enter, the pages updates, and now the page lists
+        # "1: Buy peacock feathers" as an item in a to-do list
 
-    # She is invited to enter a to-do item straight away
+        # There is still a text box inviting her to add another item.
+        # She enters "Use peacock feathers to make a fly"
+        # (Edith is very methodical.)
 
-    # She types "Buy peacock feathers" into a text box
-    # (Edith's hobby is trying fly-fishing lures)
+        # The page updates again, and now shows both items on here list
 
-    # When she hits enter, the pages updates, and now the page lists
-    # "1: Buy peacock feathers" as an item in a to-do list
+        # Edith wonders whether the site will remember here lists.
+        # Then she sees that the site had generated a unique URL for her.
+        # The is some explanatory text to that effect.
 
-    # There is still a text box inviting her to add another item.
-    # She enters "Use peacock feathers to make a fly"
-    # (Edith is very methodical.)
+        # She visits that URL - her to-do list is still there.
 
-    # The page updates again, and now shows both items on here list
-
-    # Edith wonders whether the site will remember here lists.
-    # Then she sees that the site had generated a unique URL for her.
-    # The is some explanatory text to that effect.
-
-    # She visits that URL - her to-do list is still there.
-
-    # Satisfied, she goes back to sleep
-
-    # Browser.quit()
+        # Satisfied, she goes back to sleep
 
