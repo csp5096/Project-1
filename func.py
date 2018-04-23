@@ -19,7 +19,7 @@ class TestNewVistor:
         assert 'To-Do' in header_text
 
         # She is invited to enter a to-do item straight away
-        inputbox = self.driver.find_elment_by_id('id_new_item')
+        inputbox = self.driver.find_element_by_id('id_new_item')
         assert inputbox.get_attribute('placeholder') == 'Enter a to-do item'
 
         # She types "Buy peacock feathers" into a text box
@@ -31,7 +31,7 @@ class TestNewVistor:
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
 
-        table = self.driver.find_elment_by_id('id_list_table')
+        table = self.driver.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
         assert any(row.text == '1: Buy peacock feathers' for row in rows)
 
