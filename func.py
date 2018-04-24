@@ -8,6 +8,16 @@ import time
 @pytest.mark.incremental
 class TestNewVistor:
 
+    def check_for_row_in_list_table(self, row_text):
+        """
+        Testing helper method 1
+        :param row_text:
+        :return:
+        """
+        table = self.driver.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        assert row_text in [row.text for row in rows]
+
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Edith has heard about a cool new online to-do app.
         # She goes to check out its homepage
@@ -30,10 +40,7 @@ class TestNewVistor:
         # "1: Buy peacock feathers" as an item in a to-do list
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
-
-        table = self.driver.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        assert '1: Buy peacock feathers' in [row.text for row in rows]
+        self.check_for_row_in_list_table('1: Buy peacock feathers')
 
         # There is still a text box inviting her to add another item.
         # She enters "Use peacock feathers to make a fly"
@@ -44,10 +51,8 @@ class TestNewVistor:
         time.sleep(1)
 
         # The page updates again, and now shows both items on here list.
-        table = self.driver.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        assert '1: Buy peacock feathers' in [row.text for row in rows]
-        assert '2: Use peacock feathers to make a fly' in [row.text for row in rows]
+        self.check_for_row_in_list_table('1: Buy peacock feathers')
+        self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
 
         # Edith wonders whether the site will remember here lists.
         # Then she sees that the site had generated a unique URL for her.
