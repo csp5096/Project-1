@@ -1,7 +1,11 @@
 import pytest
-from lists import apps
+from .lazy_django import get_django_version, skip_if_no_django
 
-@pytest.fixture(scope='session')
-def client():
-    apps.config['TESTING'] = True
-    return apps.test_client()
+@pytest.fixture()
+def rf():
+    """RequestFactory instance"""
+    skip_if_no_django()
+
+    from django.test.client import RequestFactory
+
+    return RequestFactory()

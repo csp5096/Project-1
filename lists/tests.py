@@ -7,6 +7,7 @@ from lists.models import Item
 
 import pytest
 
+#@pytest.mark.usefixtures("rf")
 @pytest.mark.django_db
 class TestHomeView:
 
