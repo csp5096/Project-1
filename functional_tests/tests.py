@@ -16,7 +16,7 @@ class TestNewVistor:
         """
         table = self.driver.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        assert 'foo' in [row.text for row in rows]
+        assert row_text in [row.text for row in rows]
 
     def test_can_start_a_list_and_retrieve_it_later(self, live_server):
         # Edith has heard about a cool new online to-do app.
