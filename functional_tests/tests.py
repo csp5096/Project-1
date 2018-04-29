@@ -18,11 +18,10 @@ class TestNewVistor:
         rows = table.find_elements_by_tag_name('tr')
         assert row_text in [row.text for row in rows]
 
-    @pytest.mark.usefixtures("live_server")
-    def test_can_start_a_list_and_retrieve_it_later(self):
+    def test_can_start_a_list_and_retrieve_it_later(self, live_server):
         # Edith has heard about a cool new online to-do app.
         # She goes to check out its homepage
-        self.driver.get(self.live_server.url)
+        self.driver.get(live_server.url)
 
         # She notices the page title and header mention to-do lists
         assert 'To-Do' in self.driver.title
@@ -62,4 +61,3 @@ class TestNewVistor:
         # She visits that URL - her to-do list is still there.
 
         # Satisfied, she goes back to sleep
-

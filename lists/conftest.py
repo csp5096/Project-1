@@ -1,5 +1,4 @@
 import pytest
-from .lazy_django import get_django_version, skip_if_no_django
 
 @pytest.fixture()
 def rf():
