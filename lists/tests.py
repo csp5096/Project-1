@@ -2,7 +2,7 @@ from django.urls import resolve
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.test import RequestFactory
-from lists.views import home_page, view_list
+from lists.views import home_page, view_list, new_list
 from lists.models import Item
 
 import pytest
@@ -15,25 +15,6 @@ class TestHomeView:
         request = RequestFactory().get('/')
         response = home_page(request)
         assert response.status_code == 200
-
-    def test_can_save_a_POST_request(self):
-        request = RequestFactory().post('/', data={'item_text': 'A new list item'})
-        response = home_page(request)
-        assert Item.objects.count() == 1
-        new_item = Item.objects.first()
-        assert new_item.text == 'A new list item'
-
-    def test_redirects_after_POST(self):
-        request = RequestFactory().post('/', data={'item_text': 'A new list item'})
-        response = home_page(request)
-        assert response.status_code == 302
-        assert response['location'] == '/lists/the-only-list-in-the-world/'
-
-    #@pytest.mark.skip(reason='UnboundLocalError: local variable new_text_item')
-    def test_only_saves_items_when_necessary(self):
-        request = RequestFactory().get('/')
-        response = home_page(request)
-        assert Item.objects.count() == 0
 
 @pytest.mark.django_db
 class TestListView:
@@ -53,6 +34,22 @@ class TestListView:
         assert 'itemey 1' in response.content.decode()
         assert 'itemey 2' in response.content.decode()
 
+@pytest.mark.django_db
+class TestNewList:
+
+    def test_can_save_a_POST_request(self):
+        request = RequestFactory().post('/lists/new', data={'item_text': 'A new list item'})
+        response = new_list(request)
+        assert Item.objects.count() == 1
+        new_item = Item.objects.first()
+        assert new_item.text == 'A new list item'
+
+    def test_redirects_after_POST(self):
+        request = RequestFactory().post('/lists/new', data={'item_text': 'A new list item'})
+        response = new_list(request)
+        assert response.status_code == 302
+        assert Item.objects.count() == 1
+        assert response['location'] == '/lists/the-only-list-in-the-world/'
 
 @pytest.mark.django_db
 class TestItemModel:
