@@ -1,6 +1,6 @@
 # Project-1
 
-Django project to build a to-do app with TDD methodology and pytest.
+Dockerized-RESTful Django Application built with Pytest & TDD Methodology
 
 ## Getting Started
 

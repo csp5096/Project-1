@@ -25,8 +25,9 @@ class TestListView:
         assert response.status_code == 200
 
     def test_displays_all_items(self):
-        Item.objects.create(text='itemey 1')
-        Item.objects.create(text='itemey 2')
+        list_ = List.objects.create()
+        Item.objects.create(text='itemey 1', list=list_)
+        Item.objects.create(text='itemey 2', list=list_)
 
         request = RequestFactory().get('/lists/the-only-list-in-the-world')
         response = view_list(request)
@@ -75,10 +76,9 @@ class TestListAndItemModel:
         assert saved_items.count() == 2
 
         first_saved_item = saved_items[0]
+        second_saved_item = saved_items[1]
         assert first_saved_item.text == 'The first (ever) list item'
         assert first_saved_item.list == list_
-
-        second_saved_item = saved_items[1]
         assert second_saved_item.text == 'Item the second'
         assert second_saved_item.list == list_
 
