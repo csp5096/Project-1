@@ -2,7 +2,7 @@ from django.urls import resolve
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.test import RequestFactory
-from lists.views import home_page, view_list, new_list
+from lists.views import home_page, view_list, list_new
 from lists.models import Item, List
 
 import pytest
@@ -11,6 +11,7 @@ import pytest
 @pytest.mark.django_db
 class TestHomeView:
 
+    @pytest.mark.usefixtures("rf")
     def test_uses_home_template(self):
         request = RequestFactory().get('/')
         response = home_page(request)
@@ -20,17 +21,21 @@ class TestHomeView:
 class TestListView:
 
     def test_uses_list_template(self):
-        request = RequestFactory().get('/lists/the-only-list-in-the-world')
-        response = view_list(request)
+        list_ = List.objects.create()
+        request = RequestFactory().get(f'/lists/{list_.id}/')
+        response = view_list(request, list_id)
         assert response.status_code == 200
 
-    def test_displays_all_items(self):
-        list_ = List.objects.create()
-        Item.objects.create(text='itemey 1', list=list_)
-        Item.objects.create(text='itemey 2', list=list_)
+    def test_displays_only_items_for_the_list(self):
+        correct_list = List.objects.create()
+        Item.objects.create(text='itemey 1', list=correct_list)
+        Item.objects.create(text='itemey 2', list=correct_list)
+        other_list = List.objects.create()
+        Item.objects.create(text='other list item 1', list=other_list)
+        Item.objects.create(text='other list item 2', list=other_list)
 
-        request = RequestFactory().get('/lists/the-only-list-in-the-world')
-        response = view_list(request)
+        request = RequestFactory().get(f'/lists/{correct_list.id}/')
+        response = view_list(request, list_id)
 
         assert 'itemey 1' in response.content.decode()
         assert 'itemey 2' in response.content.decode()
@@ -40,17 +45,16 @@ class TestNewList:
 
     def test_can_save_a_POST_request(self):
         request = RequestFactory().post('/lists/new', data={'item_text': 'A new list item'})
-        response = new_list(request)
+        response = list_new(request)
         assert Item.objects.count() == 1
         new_item = Item.objects.first()
         assert new_item.text == 'A new list item'
 
     def test_redirects_after_POST(self):
         request = RequestFactory().post('/lists/new', data={'item_text': 'A new list item'})
-        response = new_list(request)
-        assert response.status_code == 302
-        assert Item.objects.count() == 1
-        assert response['location'] == '/lists/the-only-list-in-the-world/'
+        response = list_new(request)
+        new_list = List.objects.first()
+        assert response['location'] == f'/lists/{new_list.id}/'
 
 @pytest.mark.django_db
 class TestListAndItemModel:
