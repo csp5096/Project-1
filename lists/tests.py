@@ -76,7 +76,7 @@ class TestListAndItemModel:
 
         first_saved_item = saved_items[0]
         assert first_saved_item.text == 'The first (ever) list item'
-        assert first_saved_item.ist == list_
+        assert first_saved_item.list == list_
 
         second_saved_item = saved_items[1]
         assert second_saved_item.text == 'Item the second'
