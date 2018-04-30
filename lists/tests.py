@@ -2,7 +2,7 @@ from django.urls import resolve
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.test import RequestFactory
-from lists.views import home_page
+from lists.views import home_page, view_list
 from lists.models import Item
 
 import pytest
@@ -27,7 +27,7 @@ class TestHomeView:
         request = RequestFactory().post('/', data={'item_text': 'A new list item'})
         response = home_page(request)
         assert response.status_code == 302
-        assert response['location'] == '/'
+        assert response['location'] == '/lists/the-only-list-in-the-world/'
 
     #@pytest.mark.skip(reason='UnboundLocalError: local variable new_text_item')
     def test_only_saves_items_when_necessary(self):
@@ -35,12 +35,20 @@ class TestHomeView:
         response = home_page(request)
         assert Item.objects.count() == 0
 
-    def test_displays_all_list_items(self):
+@pytest.mark.django_db
+class TestListView:
+
+    def test_uses_list_template(self):
+        request = RequestFactory().get('/lists/the-only-list-in-the-world')
+        response = view_list(request)
+        assert response.status_code == 200
+
+    def test_displays_all_items(self):
         Item.objects.create(text='itemey 1')
         Item.objects.create(text='itemey 2')
 
-        request = RequestFactory().get('/')
-        response = home_page(request)
+        request = RequestFactory().get('/lists/the-only-list-in-the-world')
+        response = view_list(request)
 
         assert 'itemey 1' in response.content.decode()
         assert 'itemey 2' in response.content.decode()
