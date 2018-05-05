@@ -7,22 +7,21 @@ from lists.models import Item, List
 
 import pytest
 
-#@pytest.mark.usefixtures("rf")
 @pytest.mark.django_db
 class TestHomeView:
 
-    @pytest.mark.usefixtures("rf")
-    def test_uses_home_template(self):
-        request = RequestFactory().get('/')
+    def test_uses_home_template(self, rf):
+        request = rf.get('/')
         response = home_page(request)
         assert response.status_code == 200
 
 @pytest.mark.django_db
 class TestListView:
 
-    def test_uses_list_template(self):
+    def test_uses_list_template(self, rf):
         list_ = List.objects.create()
-        request = RequestFactory().get(f'/lists/{list_.id}/')
+        request = rf.get(f'/lists/{list_.id}/')
+        list_id = List.objects.get()
         response = view_list(request, list_id)
         assert response.status_code == 200
 
@@ -35,6 +34,7 @@ class TestListView:
         Item.objects.create(text='other list item 2', list=other_list)
 
         request = RequestFactory().get(f'/lists/{correct_list.id}/')
+        list_id = List.objects.all()
         response = view_list(request, list_id)
 
         assert 'itemey 1' in response.content.decode()
@@ -43,15 +43,15 @@ class TestListView:
 @pytest.mark.django_db
 class TestNewList:
 
-    def test_can_save_a_POST_request(self):
-        request = RequestFactory().post('/lists/new', data={'item_text': 'A new list item'})
+    def test_can_save_a_POST_request(self, rf):
+        request = rf.post('/lists/new', data={'item_text': 'A new list item'})
         response = list_new(request)
         assert Item.objects.count() == 1
         new_item = Item.objects.first()
         assert new_item.text == 'A new list item'
 
-    def test_redirects_after_POST(self):
-        request = RequestFactory().post('/lists/new', data={'item_text': 'A new list item'})
+    def test_redirects_after_POST(self, rf):
+        request = rf.post('/lists/new', data={'item_text': 'A new list item'})
         response = list_new(request)
         new_list = List.objects.first()
         assert response['location'] == f'/lists/{new_list.id}/'
